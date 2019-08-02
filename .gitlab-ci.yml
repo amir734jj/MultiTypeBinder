@@ -10,7 +10,7 @@ build:
   script:
   - dotnet build -c Release
 
-nuget-main:
+nuget:
   tags:
   - docker
   image: microsoft/dotnet:2.2-sdk
