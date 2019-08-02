@@ -5,42 +5,25 @@ stages:
 build:
   tags:
   - docker
-  image: microsoft/dotnet:2.1-sdk
+  image: microsoft/dotnet:2.2-sdk
   stage: build
   script:
-  - dotnet build ./src/RabbitLink -c Release
-  - dotnet build ./src/RabbitLink.Serialization.Json -c Release
+  - dotnet build -c Release
 
 nuget-main:
   tags:
   - docker
-  image: microsoft/dotnet:2.1-sdk
+  image: microsoft/dotnet:2.2-sdk
   stage: nuget
   only:
   - /^v([0-9]+)(\.([0-9]+)){1,2}.*$/
   except:
   - branches
   script:
-  - dotnet pack ./src/RabbitLink -c Release -o "${PWD}/artifacts/"
+  - dotnet pack ./Core -c Release -o "${PWD}/artifacts/"
   - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${NUGET_API_KEY}" ./artifacts/*.nupkg
   artifacts:
     expire_in: 31d
     paths:
     - artifacts/*
 
-nuget-json:
-  tags:
-  - docker
-  image: microsoft/dotnet:2.1-sdk
-  stage: nuget
-  only:
-  - /^json-v([0-9]+)(\.([0-9]+)){1,2}.*$/
-  except:
-  - branches
-  script:
-  - dotnet pack ./src/RabbitLink.Serialization.Json -c Release -o "${PWD}/artifacts/"
-  - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${NUGET_API_KEY}" ./artifacts/*.nupkg
-  artifacts:
-    expire_in: 31d
-    paths:
-    - artifacts/*
