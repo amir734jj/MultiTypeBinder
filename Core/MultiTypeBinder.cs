@@ -32,11 +32,11 @@ namespace Core
             _basicTypeInfos = basicTypeInfos;
         }
 
-        public IEnumerable<IMultiTypeItem<TEnum>> Map(IEnumerable<object> items)
+        public List<MultiTypeItem<TEnum>> Map(IEnumerable<object> items)
         {
             return items.Select(x =>
             {
-                var key = _basicTypeInfos.Keys.First(y => y.IsInstanceOfType(x));
+                var key = _basicTypeInfos.Keys.FirstOrDefault(y => y.IsInstanceOfType(x)) ?? throw new Exception($"There is no binder registered for type of {x.GetType().Name}");
 
                 var value = _basicTypeInfos[key].ToDictionary(z => z.Key, z => new BasicPropertyInfoUse
                 {
@@ -45,7 +45,7 @@ namespace Core
                 });
                 
                 return new MultiTypeItem<TEnum>(value);
-            });
+            }).ToList();
         }
     }
 
@@ -90,9 +90,26 @@ namespace Core
 
         public IMultiTypeBinderBuilder<TEnum> FinalizeType()
         {
+            foreach (var key in Enum.GetValues(typeof(TEnum)).Cast<TEnum>())
+            {
+                if (!BasicPropertyInfos.ContainsKey(key))
+                {
+                    BasicPropertyInfos[key] = InvalidPropertyInfo(key);
+                }
+            }
+            
             _multiTypeBinderBuilder.BasicTypeInfos[typeof(TClass)] = BasicPropertyInfos;
 
             return _multiTypeBinderBuilder;
+        }
+
+        private static BasicPropertyInfoBuild InvalidPropertyInfo(TEnum key)
+        {
+            return new BasicPropertyInfoBuild
+            {
+                GetValue = _ => throw new Exception($"Getter for {key} is not defined"),
+                SetValue = (x, _) => throw new Exception($"Setter for {key} is not defined")
+            };
         }
     }
 
@@ -160,8 +177,10 @@ namespace Core
                     {
                         case TClass classInstance:
                             return _getter(classInstance);
+                        case null:
+                            throw new NullReferenceException("Object is null");
                         default:
-                            throw new Exception();
+                            throw new InvalidCastException($"Type of getter object is {instance.GetType().Name} instead of {typeof(TClass).Name}");
                     }
                 },
                 SetValue = (instance, value) =>
@@ -174,13 +193,16 @@ namespace Core
                                 case TProperty propertyValue:
                                     setter(classInstance, propertyValue);
                                     break;
+                                case null:
+                                    throw new NullReferenceException("Property value is null");
                                 default:
-                                    throw new Exception();
+                                    throw new InvalidCastException($"Type of setter arg is {value.GetType().Name} instead of {typeof(TProperty).Name}");
                             }
-
                             break;
+                        case null:
+                            throw new NullReferenceException("Object is null");
                         default:
-                            throw new Exception();
+                            throw new InvalidCastException($"Type of setter object is {instance.GetType().Name} instead of {typeof(TClass).Name}");
                     }
                 }
             };

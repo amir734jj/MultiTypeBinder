@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
@@ -10,9 +9,9 @@ namespace Core.Interfaces
         object this[TEnum key] { get; set; }
     }
     
-    public interface IMultiTypeBinder<in TEnum> where TEnum: Enum
+    public interface IMultiTypeBinder<TEnum> where TEnum: Enum
     {
-        IEnumerable<IMultiTypeItem<TEnum>> Map(IEnumerable<object> items);
+        List<MultiTypeItem<TEnum>> Map(IEnumerable<object> items);
     }
     
     public interface  IMultiTypeBinderBuilder<TEnum> where TEnum: Enum
