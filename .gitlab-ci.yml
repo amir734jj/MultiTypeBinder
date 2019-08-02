@@ -18,6 +18,7 @@ nuget:
   only:
   - master
   script:
+  - dotnet build -c Release
   - dotnet pack ./Core -c Release -o "${PWD}/artifacts/"
   - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${NUGET_API_KEY}" ./artifacts/*.nupkg
   artifacts:
