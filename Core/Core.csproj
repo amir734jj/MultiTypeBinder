@@ -4,6 +4,11 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <AssemblyName>multi-type-binder</AssemblyName>
         <LangVersion>latest</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Description>Multi-type object binder; without using any runtime reflection</Description>
+        <PackageProjectUrl>https://github.com/amir734jj/MultiTypeBinder</PackageProjectUrl>
+        <Version>1.0.0</Version>
+        <PackageReleaseNotes>Working state</PackageReleaseNotes>
     </PropertyGroup>
 
 </Project>
