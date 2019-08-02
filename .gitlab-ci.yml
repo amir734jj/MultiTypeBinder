@@ -17,8 +17,6 @@ nuget:
   stage: nuget
   only:
   - master
-  except:
-  - branches
   script:
   - dotnet pack ./Core -c Release -o "${PWD}/artifacts/"
   - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${NUGET_API_KEY}" ./artifacts/*.nupkg
