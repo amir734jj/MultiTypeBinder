@@ -34,8 +34,13 @@ namespace Core
 
         public List<MultiTypeItem<TEnum>> Map(IEnumerable<object> items)
         {
-            return items.Select(x =>
+            return items?.Select(x =>
             {
+                if (x == null)
+                {
+                    throw new NullReferenceException("Object is null");
+                }
+                
                 var key = _basicTypeInfos.Keys.FirstOrDefault(y => y.IsInstanceOfType(x)) ?? throw new Exception($"There is no binder registered for type of {x.GetType().Name}");
 
                 var value = _basicTypeInfos[key].ToDictionary(z => z.Key, z => new BasicPropertyInfoUse
