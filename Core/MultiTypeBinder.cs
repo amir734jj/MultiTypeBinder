@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Core.Interfaces;
-using Core.Models;
+using MultiTypeBinder.Interfaces;
+using MultiTypeBinder.Models;
 
-namespace Core
+namespace MultiTypeBinder
 {
     public class MultiTypeItem<TEnum> : IMultiTypeItem<TEnum> where TEnum : Enum
     {

@@ -7,8 +7,10 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Description>Multi-type object binder; without using any runtime reflection</Description>
         <PackageProjectUrl>https://github.com/amir734jj/MultiTypeBinder</PackageProjectUrl>
-        <Version>1.0.0</Version>
+        <Version>1.0.1</Version>
         <PackageReleaseNotes>Working state</PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RootNamespace>MultiTypeBinder</RootNamespace>
     </PropertyGroup>
 
 </Project>

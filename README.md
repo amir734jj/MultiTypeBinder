@@ -2,6 +2,9 @@
 
 This library is similar to my [object-binder](https://github.com/amir734jj/object-binder) but supports multiple types for binding.
 
+[![pipeline status](https://gitlab.com/hesamian/MultiTypeBinder/badges/master/pipeline.svg)](https://gitlab.com/hesamian/MultiTypeBinder/commits/master)
+
+
 ```csharp
 public enum Key
 {

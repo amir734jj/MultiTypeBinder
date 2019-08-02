@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Core.Interfaces
+namespace MultiTypeBinder.Interfaces
 {
     public interface IMultiTypeItem<in TEnum> where TEnum : Enum
     {

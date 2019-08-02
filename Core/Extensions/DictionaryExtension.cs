@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Core.Extensions
+namespace MultiTypeBinder.Extensions
 {
     public static class DictionaryExtension
     {
