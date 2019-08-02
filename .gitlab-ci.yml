@@ -9,6 +9,7 @@ build:
   stage: build
   script:
   - dotnet build -c Release
+  - dotnet test
 
 nuget:
   tags:
