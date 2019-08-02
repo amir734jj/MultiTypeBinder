@@ -16,7 +16,7 @@ nuget:
   image: microsoft/dotnet:2.2-sdk
   stage: nuget
   only:
-  - /^v([0-9]+)(\.([0-9]+)){1,2}.*$/
+  - master
   except:
   - branches
   script:
