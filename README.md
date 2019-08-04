@@ -5,6 +5,9 @@ This library is similar to my [object-binder](https://github.com/amir734jj/objec
 [![pipeline status](https://gitlab.com/hesamian/MultiTypeBinder/badges/master/pipeline.svg)](https://gitlab.com/hesamian/MultiTypeBinder/commits/master)
 
 
+[NuGet](https://www.nuget.org/packages/multi-type-binder/)
+
+
 ```csharp
 public enum Key
 {
