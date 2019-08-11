@@ -88,7 +88,7 @@ namespace MultiTypeBinder
             BasicPropertyInfos = new Dictionary<TEnum, BasicPropertyInfoBuild>();
         }
 
-        public IBindTypeBuilder<TEnum, TClass> WithProperty<TProperty>(Expression<Func<TClass, TProperty>> property,
+        public IBindTypeBuilder<TEnum, TClass> WithProperty<TProperty>(Expression<Func<TClass, TProperty>> _,
             Func<IBindPropertyBuilder<TEnum, TClass, TProperty>, IVoid> opt)
         {
             opt(new BindPropertyBuilder<TEnum, TClass, TProperty>(this));
@@ -131,14 +131,14 @@ namespace MultiTypeBinder
             _bindTypeBuilder = bindTypeBuilder;
         }
 
-        public IBindPropertyGetterBuilder<TEnum, TClass, TProperty> Bind(TEnum key)
+        public IBindPropertyGetterBuilder<TClass, TProperty> Bind(TEnum key)
         {
             return new BindPropertyGetterBuilder<TEnum, TClass, TProperty>(_bindTypeBuilder, key);
         }
     }
 
     public class
-        BindPropertyGetterBuilder<TEnum, TClass, TProperty> : IBindPropertyGetterBuilder<TEnum, TClass, TProperty>
+        BindPropertyGetterBuilder<TEnum, TClass, TProperty> : IBindPropertyGetterBuilder<TClass, TProperty>
         where TEnum : Enum
     {
         private readonly BindTypeBuilder<TEnum, TClass> _bindTypeBuilder;
@@ -151,14 +151,14 @@ namespace MultiTypeBinder
             _key = key;
         }
 
-        public IBindPropertySetterBuilder<TEnum, TClass, TProperty> WithGetter(Func<TClass, TProperty> getter)
+        public IBindPropertySetterBuilder<TClass, TProperty> WithGetter(Func<TClass, TProperty> getter)
         {
             return new BindPropertySetterBuilder<TEnum, TClass, TProperty>(_bindTypeBuilder, _key, getter);
         }
     }
 
     public class
-        BindPropertySetterBuilder<TEnum, TClass, TProperty> : IBindPropertySetterBuilder<TEnum, TClass, TProperty>
+        BindPropertySetterBuilder<TEnum, TClass, TProperty> : IBindPropertySetterBuilder<TClass, TProperty>
         where TEnum : Enum
     {
         private readonly BindTypeBuilder<TEnum, TClass> _bindTypeBuilder;

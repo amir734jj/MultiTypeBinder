@@ -23,22 +23,23 @@ namespace MultiTypeBinder.Interfaces
 
     public interface IBindTypeBuilder<TEnum, TClass> where TEnum : Enum
     {
-        IBindTypeBuilder<TEnum, TClass> WithProperty<TProperty>(Expression<Func<TClass, TProperty>> property, Func<IBindPropertyBuilder<TEnum, TClass, TProperty>, IVoid> opt);
+        // ReSharper disable once UnusedParameter.Global
+        IBindTypeBuilder<TEnum, TClass> WithProperty<TProperty>(Expression<Func<TClass, TProperty>> _, Func<IBindPropertyBuilder<TEnum, TClass, TProperty>, IVoid> opt);
 
         IMultiTypeBinderBuilder<TEnum> FinalizeType();
     }
 
-    public interface IBindPropertyBuilder<TEnum, TClass, TProperty> where TEnum : Enum
+    public interface IBindPropertyBuilder<in TEnum, out TClass, TProperty> where TEnum : Enum
     {
-        IBindPropertyGetterBuilder<TEnum, TClass, TProperty> Bind(TEnum key);
+        IBindPropertyGetterBuilder<TClass, TProperty> Bind(TEnum key);
     }
 
-    public interface IBindPropertyGetterBuilder<TEnum, TClass, TProperty> where TEnum : Enum
+    public interface IBindPropertyGetterBuilder<out TClass, TProperty>
     {
-        IBindPropertySetterBuilder<TEnum, TClass, TProperty> WithGetter(Func<TClass, TProperty> getter);
+        IBindPropertySetterBuilder<TClass, TProperty> WithGetter(Func<TClass, TProperty> getter);
     }
 
-    public interface IBindPropertySetterBuilder<TEnum, TClass, out TProperty> where TEnum : Enum
+    public interface IBindPropertySetterBuilder<out TClass, out TProperty>
     {
         IVoid WithSetter(Action<TClass, TProperty> setter);
     }
