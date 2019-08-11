@@ -1,6 +1,6 @@
 # MultiTypeBinder
 
-This library is similar to my [object-binder](https://github.com/amir734jj/object-binder) but supports multiple types for binding.
+This library is similar to my [object-binder](https://github.com/amir734jj/object-binder) but supports multiple types for binding without any reflection.
 
 [![pipeline status](https://gitlab.com/hesamian/MultiTypeBinder/badges/master/pipeline.svg)](https://gitlab.com/hesamian/MultiTypeBinder/commits/master)
 
