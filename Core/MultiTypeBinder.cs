@@ -32,7 +32,7 @@ namespace MultiTypeBinder
             _basicTypeInfos = basicTypeInfos;
         }
 
-        public List<MultiTypeItem<TEnum>> Map(IEnumerable<object> items)
+        public List<IMultiTypeItem<TEnum>> Map(IEnumerable<object> items)
         {
             return items?.Select(x =>
             {
@@ -40,16 +40,17 @@ namespace MultiTypeBinder
                 {
                     throw new NullReferenceException("Object is null");
                 }
-                
-                var key = _basicTypeInfos.Keys.FirstOrDefault(y => y.IsInstanceOfType(x)) ?? throw new Exception($"There is no binder registered for type of {x.GetType().Name}");
 
-                var value = _basicTypeInfos[key].ToDictionary(z => z.Key, z => new BasicPropertyInfoUse
+                var key = _basicTypeInfos.Keys.FirstOrDefault(y => y.IsInstanceOfType(x)) ??
+                          throw new Exception($"There is no binder registered for type of {x.GetType().Name}");
+
+                var value = _basicTypeInfos[key].ToDictionary(y => y.Key, y => new BasicPropertyInfoUse
                 {
-                    GetValue = () => z.Value.GetValue(x),
-                    SetValue = a => z.Value.SetValue(x, a)
+                    GetValue = () => y.Value.GetValue(x),
+                    SetValue = z => y.Value.SetValue(x, z)
                 });
-                
-                return new MultiTypeItem<TEnum>(value);
+
+                return (IMultiTypeItem<TEnum>) new MultiTypeItem<TEnum>(value);
             }).ToList();
         }
     }
@@ -62,7 +63,7 @@ namespace MultiTypeBinder
         {
             BasicTypeInfos = new Dictionary<Type, Dictionary<TEnum, BasicPropertyInfoBuild>>();
         }
-        
+
         public IMultiTypeBinderBuilder<TEnum> WithType<TClass>(
             Func<IBindTypeBuilder<TEnum, TClass>, IMultiTypeBinderBuilder<TEnum>> opt)
         {
@@ -88,9 +89,11 @@ namespace MultiTypeBinder
         }
 
         public IBindTypeBuilder<TEnum, TClass> WithProperty<TProperty>(Expression<Func<TClass, TProperty>> property,
-            Func<IBindPropertyBuilder<TEnum, TClass, TProperty>, IBindTypeBuilder<TEnum, TClass>> opt)
+            Func<IBindPropertyBuilder<TEnum, TClass, TProperty>, IVoid> opt)
         {
-            return opt(new BindPropertyBuilder<TEnum, TClass, TProperty>(this));
+            opt(new BindPropertyBuilder<TEnum, TClass, TProperty>(this));
+
+            return this;
         }
 
         public IMultiTypeBinderBuilder<TEnum> FinalizeType()
@@ -102,7 +105,7 @@ namespace MultiTypeBinder
                     BasicPropertyInfos[key] = InvalidPropertyInfo(key);
                 }
             }
-            
+
             _multiTypeBinderBuilder.BasicTypeInfos[typeof(TClass)] = BasicPropertyInfos;
 
             return _multiTypeBinderBuilder;
@@ -172,7 +175,7 @@ namespace MultiTypeBinder
             _getter = getter;
         }
 
-        public IBindTypeBuilder<TEnum, TClass> WithSetter(Action<TClass, TProperty> setter)
+        public IVoid WithSetter(Action<TClass, TProperty> setter)
         {
             _bindTypeBuilder.BasicPropertyInfos[_key] = new BasicPropertyInfoBuild
             {
@@ -185,7 +188,8 @@ namespace MultiTypeBinder
                         case null:
                             throw new NullReferenceException("Object is null");
                         default:
-                            throw new InvalidCastException($"Type of getter object is {instance.GetType().Name} instead of {typeof(TClass).Name}");
+                            throw new InvalidCastException(
+                                $"Type of getter object is {instance.GetType().Name} instead of {typeof(TClass).Name}");
                     }
                 },
                 SetValue = (instance, value) =>
@@ -201,18 +205,25 @@ namespace MultiTypeBinder
                                 case null:
                                     throw new NullReferenceException("Property value is null");
                                 default:
-                                    throw new InvalidCastException($"Type of setter arg is {value.GetType().Name} instead of {typeof(TProperty).Name}");
+                                    throw new InvalidCastException(
+                                        $"Type of setter arg is {value.GetType().Name} instead of {typeof(TProperty).Name}");
                             }
+
                             break;
                         case null:
                             throw new NullReferenceException("Object is null");
                         default:
-                            throw new InvalidCastException($"Type of setter object is {instance.GetType().Name} instead of {typeof(TClass).Name}");
+                            throw new InvalidCastException(
+                                $"Type of setter object is {instance.GetType().Name} instead of {typeof(TClass).Name}");
                     }
                 }
             };
 
-            return _bindTypeBuilder;
+            return new Void();
         }
+    }
+
+    public class Void : IVoid
+    {
     }
 }

@@ -11,7 +11,7 @@ namespace MultiTypeBinder.Interfaces
     
     public interface IMultiTypeBinder<TEnum> where TEnum: Enum
     {
-        List<MultiTypeItem<TEnum>> Map(IEnumerable<object> items);
+        List<IMultiTypeItem<TEnum>> Map(IEnumerable<object> items);
     }
     
     public interface  IMultiTypeBinderBuilder<TEnum> where TEnum: Enum
@@ -23,7 +23,7 @@ namespace MultiTypeBinder.Interfaces
 
     public interface IBindTypeBuilder<TEnum, TClass> where TEnum : Enum
     {
-        IBindTypeBuilder<TEnum, TClass> WithProperty<TProperty>(Expression<Func<TClass, TProperty>> property, Func<IBindPropertyBuilder<TEnum, TClass, TProperty>, IBindTypeBuilder<TEnum, TClass>> opt);
+        IBindTypeBuilder<TEnum, TClass> WithProperty<TProperty>(Expression<Func<TClass, TProperty>> property, Func<IBindPropertyBuilder<TEnum, TClass, TProperty>, IVoid> opt);
 
         IMultiTypeBinderBuilder<TEnum> FinalizeType();
     }
@@ -40,6 +40,11 @@ namespace MultiTypeBinder.Interfaces
 
     public interface IBindPropertySetterBuilder<TEnum, TClass, out TProperty> where TEnum : Enum
     {
-        IBindTypeBuilder<TEnum, TClass> WithSetter(Action<TClass, TProperty> setter);
+        IVoid WithSetter(Action<TClass, TProperty> setter);
+    }
+
+    public interface IVoid
+    {
+        
     }
 }

@@ -7,17 +7,18 @@ namespace MultiTypeBinder.Tests
 {
     public enum Key
     {
-        Name, RandomKey
+        Name,
+        RandomKey
     }
 
     public class EntityA
     {
-        public string Name { get; set; }
+        public string Name1 { get; set; }
     }
 
     public class EntityB
     {
-        public string Name { get; set; }
+        public string Name2 { get; set; }
     }
 
     public class MultiTypeBinderTest
@@ -26,21 +27,21 @@ namespace MultiTypeBinder.Tests
         public void Test__Get()
         {
             // Arrange
-            var a = new EntityA {Name = "A"};
-            var b = new EntityB {Name = "B"};
+            var a = new EntityA {Name1 = "A"};
+            var b = new EntityB {Name2 = "B"};
 
             var multiTypeItems = new MultiTypeBinderBuilder<Key>()
                 .WithType<EntityA>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name1, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name1)
+                        .WithSetter((x, y) => x.Name1 = y))
                     .FinalizeType())
                 .WithType<EntityB>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name2, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name2)
+                        .WithSetter((x, y) => x.Name2 = y))
                     .FinalizeType())
                 .Build()
                 .Map(new List<object> {a, b});
@@ -59,21 +60,21 @@ namespace MultiTypeBinder.Tests
         public void Test__Set()
         {
             // Arrange
-            var a = new EntityA {Name = "A"};
-            var b = new EntityB {Name = "B"};
+            var a = new EntityA {Name1 = "A"};
+            var b = new EntityB {Name2 = "B"};
 
             var multiTypeItems = new MultiTypeBinderBuilder<Key>()
                 .WithType<EntityA>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name1, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name1)
+                        .WithSetter((x, y) => x.Name1 = y))
                     .FinalizeType())
                 .WithType<EntityB>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name2, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name2)
+                        .WithSetter((x, y) => x.Name2 = y))
                     .FinalizeType())
                 .Build()
                 .Map(new List<object> {a, b});
@@ -95,20 +96,20 @@ namespace MultiTypeBinder.Tests
         public void Test__Get_Fail()
         {
             // Arrange
-            var source = new EntityB {Name = "A"};
+            var source = new EntityB {Name2 = "A"};
             
             var multiTypeItems = new MultiTypeBinderBuilder<Key>()
                 .WithType<EntityA>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name1, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name1)
+                        .WithSetter((x, y) => x.Name1 = y))
                     .FinalizeType())
                 .WithType<EntityB>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name2, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name2)
+                        .WithSetter((x, y) => x.Name2 = y))
                     .FinalizeType())
                 .Build()
                 .Map(new List<object> {source});
@@ -121,20 +122,20 @@ namespace MultiTypeBinder.Tests
         public void Test__Set_Fail()
         {
             // Arrange
-            var source = new EntityA {Name = "A"};
+            var source = new EntityA {Name1 = "A"};
 
             var multiTypeItems = new MultiTypeBinderBuilder<Key>()
                 .WithType<EntityA>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name1, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name1)
+                        .WithSetter((x, y) => x.Name1 = y))
                     .FinalizeType())
                 .WithType<EntityB>(opt1 => opt1
-                    .WithProperty(x => x.Name, opt2 => opt2
+                    .WithProperty(x => x.Name2, opt2 => opt2
                         .Bind(Key.Name)
-                        .WithGetter(x => x.Name)
-                        .WithSetter((x, y) => x.Name = y))
+                        .WithGetter(x => x.Name2)
+                        .WithSetter((x, y) => x.Name2 = y))
                     .FinalizeType())
                 .Build()
                 .Map(new List<object> {source});
