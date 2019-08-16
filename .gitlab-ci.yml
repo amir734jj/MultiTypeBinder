@@ -24,7 +24,7 @@ nuget:
   script:
   - dotnet build -c Release
   - dotnet pack ./${SOURCE} -c Release -o "./artifacts/"
-  - dotnet nuget push ./${SOURCE}/artifacts/* --force-english-output -s https://api.nuget.org/v3/index.json -k "${NUGET_API_KEY}"
+  - dotnet nuget push ./${SOURCE}/artifacts/* --force-english-output -s https://api.nuget.org/v3/index.json --api-key "${NUGET_API_KEY}"
   artifacts:
     expire_in: 31d
     paths:
