@@ -1,3 +1,6 @@
+before_script:
+  - export SOURCE=Core
+
 stages:
 - build
 - nuget
@@ -20,8 +23,8 @@ nuget:
   - nuget
   script:
   - dotnet build -c Release
-  - dotnet pack ./Core -c Release -o "${PWD}/artifacts/"
-  - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${NUGET_API_KEY}" ./artifacts/*.nupkg
+  - dotnet pack ./Core -c Release -o "./artifacts/"
+  - dotnet nuget push ./${SOURCE}/artifacts/ --force-english-output -s https://api.nuget.org/v3/index.json -k "${NUGET_API_KEY}"
   artifacts:
     expire_in: 31d
     paths:
